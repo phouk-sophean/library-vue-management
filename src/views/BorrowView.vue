@@ -1,54 +1,53 @@
 <template>
-  <div class="borrow min-h-screen bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 py-12 px-6 relative overflow-hidden">
-    <!-- Decorative floating shapes -->
-    <div class="absolute top-0 left-0 w-72 h-72 bg-purple-300 rounded-full opacity-30 blur-3xl -z-10 animate-pulse"></div>
-    <div class="absolute bottom-0 right-0 w-96 h-96 bg-blue-400 rounded-full opacity-20 blur-3xl -z-10 animate-ping"></div>
-
+  <section class="min-h-screen bg-gray-50 p-6">
     <!-- Title -->
-    <h1 class="text-4xl text-center font-extrabold text-blue-900 drop-shadow mb-12">
-      📘 Borrowing Information
-    </h1>
+    <h1 class="text-2xl font-bold text-gray-800 mb-4">📦 Borrowing Records</h1>
 
-    <!-- Info Card -->
-    <div class="max-w-3xl mx-auto bg-white/60 backdrop-blur-md border border-white/30 shadow-2xl rounded-3xl p-8 text-blue-900">
-      <h2 class="text-2xl font-semibold mb-6 flex items-center gap-2">
-        <span class="text-3xl">📖</span> Borrowing Rules & Services
-      </h2>
-
-      <ul class="space-y-5 text-base leading-relaxed">
-        <li class="flex items-start gap-3">
-          <span class="text-xl">🔢</span>
-          <span><strong>Borrowing Limit:</strong> You can borrow up to <span class="text-purple-700 font-semibold">5 books</span> at once.</span>
-        </li>
-        <li class="flex items-start gap-3">
-          <span class="text-xl">⏳</span>
-          <span><strong>Loan Period:</strong> Books are loaned for <span class="text-purple-700 font-semibold">14 days</span> and can be renewed once.</span>
-        </li>
-        <li class="flex items-start gap-3">
-          <span class="text-xl">💰</span>
-          <span><strong>Late Fees:</strong> $0.25 per day after the due date.</span>
-        </li>
-        <li class="flex items-start gap-3">
-          <span class="text-xl">🕒</span>
-          <span><strong>Opening Hours:</strong> Monday–Friday, <span class="text-purple-700 font-semibold">8:00 AM – 6:00 PM</span></span>
-        </li>
-        <li class="flex items-start gap-3">
-          <span class="text-xl">🪪</span>
-          <span><strong>Membership:</strong> Required. Sign up at the front desk or <span class="underline text-blue-600 cursor-pointer hover:text-blue-800">online</span>.</span>
-        </li>
-        <li class="flex items-start gap-3">
-          <span class="text-xl">📧</span>
-          <span><strong>Contact:</strong> <a href="mailto:library@example.com" class="text-blue-600 hover:underline">library@example.com</a> | (012) 345-678</span>
-        </li>
-        <li class="flex items-start gap-3">
-          <span class="text-xl">📍</span>
-          <span><strong>Location:</strong> 123 Library Street, Phnom Penh</span>
-        </li>
-      </ul>
-
-      <div class="mt-8 text-sm text-gray-700 italic text-center">
-        Need help? Ask our librarian or visit the help desk. We're here for you!
-      </div>
+    <!-- Borrowing Table -->
+    <div class="overflow-x-auto bg-white rounded-xl shadow border">
+      <table class="min-w-full text-sm text-left">
+        <thead class="bg-gray-100 text-gray-700 uppercase text-xs">
+          <tr>
+            <th class="px-4 py-3">#</th>
+            <th class="px-4 py-3">Book Title</th>
+            <th class="px-4 py-3">Member</th>
+            <th class="px-4 py-3">Borrow Date</th>
+            <th class="px-4 py-3">Return Status</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          <tr v-for="(item, index) in borrowings" :key="item.id" class="hover:bg-gray-50">
+            <td class="px-4 py-3">{{ index + 1 }}</td>
+            <td class="px-4 py-3 font-medium text-blue-600">{{ item.book }}</td>
+            <td class="px-4 py-3">{{ item.member }}</td>
+            <td class="px-4 py-3">{{ item.date }}</td>
+            <td class="px-4 py-3">
+              <span
+                :class="[
+                  'px-2 py-1 rounded-full text-xs font-medium',
+                  item.returned ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                ]"
+              >
+                {{ item.returned ? 'Returned' : 'Pending' }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-  </div>
+  </section>
 </template>
+
+<script setup>
+import { ref } from 'vue'
+
+const borrowings = ref([
+  { id: 1, book: 'The Alchemist', member: 'John Smith', date: '2025-06-20', returned: true },
+  { id: 2, book: '1984', member: 'Alice Doe', date: '2025-06-21', returned: false },
+  { id: 3, book: 'Atomic Habits', member: 'Mark Lee', date: '2025-06-19', returned: true },
+])
+</script>
+
+<style scoped>
+/* Optional custom styling */
+</style>

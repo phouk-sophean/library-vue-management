@@ -15,9 +15,6 @@ const router = createRouter({
     {
       path: '/borrow',
       name: 'borrow',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/BorrowView.vue'),
     },
     {
@@ -28,9 +25,6 @@ const router = createRouter({
     {
       path: '/category',
       name: 'category',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/CategoryView.vue'),
     }
    

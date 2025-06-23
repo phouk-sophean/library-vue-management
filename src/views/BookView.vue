@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
   <div class="home min-h-screen bg-gradient-to-br from-blue-200 via-purple-100 to-pink-200 p-6 relative overflow-hidden">
     <!-- Decorative blurred circles -->
     <div class="absolute top-0 left-0 w-72 h-72 bg-purple-400 rounded-full opacity-30 blur-3xl -z-10 animate-pulse"></div>
@@ -31,48 +32,55 @@
             Read More
           </button>
         </div>
+=======
+  <section class="min-h-screen bg-gray-50 p-6">
+    <!-- Page Title -->
+    <h1 class="text-2xl font-bold text-gray-800 mb-4">📚 Book List</h1>
+
+    <!-- Search Bar -->
+    <div class="mb-6">
+      <input
+        type="text"
+        v-model="search"
+        placeholder="Search books..."
+        class="w-full sm:w-1/2 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+
+    <!-- Book Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <div
+        v-for="book in filteredBooks"
+        :key="book.id"
+        class="bg-white rounded-xl p-4 shadow hover:shadow-md transition"
+      >
+        <h2 class="text-lg font-semibold text-blue-700">{{ book.title }}</h2>
+        <p class="text-sm text-gray-600">Author: {{ book.author }}</p>
+        <p class="text-xs text-gray-400 mt-1">Published: {{ book.year }}</p>
+>>>>>>> a546a68f58e9d0166bbd02019572bc7c00fb9f4f
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup>
-const books = [
-  {
-    title: "The Great Adventure",
-    genre: "Fantasy",
-    description: "Discover a journey through time, magic, and friendship in this unforgettable tale.",
-    image: "https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    title: "Mystery of the Lost Island",
-    genre: "Mystery",
-    description: "Uncover secrets and ancient legends buried deep within a forgotten island.",
-    image: "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    title: "Beyond the Stars",
-    genre: "Science Fiction",
-    description: "An epic science fiction story that takes you across galaxies and into unknown worlds.",
-    image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    title: "Love in the Library",
-    genre: "Romance",
-    description: "A quiet romance blooms between two book lovers in the heart of an old library.",
-    image: "https://images.unsplash.com/photo-1519682577862-22b62b24e493?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    title: "The Art of Peace",
-    genre: "Philosophy",
-    description: "Insights on mindfulness, balance, and life through ancient Eastern wisdom.",
-    image: "https://images.unsplash.com/photo-1607746882042-944635dfe10e?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    title: "The Young Coder",
-    genre: "Education / Technology",
-    description: "An inspiring guide for young minds entering the world of programming and tech.",
-    image: "https://images.unsplash.com/photo-1531497865144-0464ef8fb9c1?auto=format&fit=crop&w=800&q=80"
-  }
-]
+import { ref, computed } from 'vue'
+
+const search = ref('')
+
+const books = ref([
+  { id: 1, title: 'The Alchemist', author: 'Paulo Coelho', year: 1988 },
+  { id: 2, title: '1984', author: 'George Orwell', year: 1949 },
+  { id: 3, title: 'To Kill a Mockingbird', author: 'Harper Lee', year: 1960 },
+])
+
+const filteredBooks = computed(() => {
+  return books.value.filter((book) =>
+    book.title.toLowerCase().includes(search.value.toLowerCase())
+  )
+})
 </script>
+
+<style scoped>
+/* Optional custom styles */
+</style>

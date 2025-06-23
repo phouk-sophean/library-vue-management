@@ -1,52 +1,48 @@
 <template>
-  <div class="home min-h-screen bg-gradient-to-br from-blue-100 via-white to-purple-100 py-10 px-6">
-    <!-- Page Title -->
-    <h1 class="text-4xl font-extrabold text-center text-blue-900 mb-12 drop-shadow">📖 Library Dashboard</h1>
-
-    <!-- Hero Banner -->
-    <div class="max-w-6xl mx-auto rounded-3xl overflow-hidden shadow-xl mb-12">
-      <img
-        src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=80"
-        alt="Library Image"
-        class="w-full h-80 object-cover"
-      />
+  <section class="min-h-screen bg-gray-50 p-6">
+    <!-- Page Header -->
+    <div class="mb-6">
+      <h1 class="text-2xl font-bold text-gray-800">📊 Dashboard</h1>
+      <p class="text-sm text-gray-500">Overview of your library system</p>
     </div>
 
-    <!-- Grid Panels -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-      <!-- Left Info Card -->
-      <div class="lg:col-span-2 bg-white/70 backdrop-blur-md p-6 rounded-3xl shadow-md">
-        <h2 class="text-2xl font-semibold text-blue-900 mb-4">📚 Discover Your Library</h2>
-        <p class="text-blue-800 mb-4">
-          Our library is more than just books — it’s a vibrant space for learning, creativity, and connection.
-          Explore thousands of physical and digital resources in a peaceful environment that supports your journey.
-        </p>
-        <p class="text-gray-700 text-sm italic">✨ Visit us today and find your next great read!</p>
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="bg-white rounded-xl shadow p-4">
+        <h2 class="text-sm text-gray-500">Total Books</h2>
+        <p class="text-2xl font-bold text-blue-600">1,245</p>
       </div>
-
-      <!-- Dashboard Stats Card -->
-      <div class="grid grid-cols-2 gap-4">
-        <div class="bg-white/70 backdrop-blur-md rounded-xl p-4 shadow-md flex flex-col items-center justify-center text-center">
-          <div class="text-3xl mb-2">📖</div>
-          <div class="text-xl font-bold text-blue-800">12,000+</div>
-          <p class="text-sm text-gray-700">Books Available</p>
-        </div>
-        <div class="bg-white/70 backdrop-blur-md rounded-xl p-4 shadow-md flex flex-col items-center justify-center text-center">
-          <div class="text-3xl mb-2">👤</div>
-          <div class="text-xl font-bold text-blue-800">2,300+</div>
-          <p class="text-sm text-gray-700">Active Members</p>
-        </div>
-        <div class="bg-white/70 backdrop-blur-md rounded-xl p-4 shadow-md flex flex-col items-center justify-center text-center">
-          <div class="text-3xl mb-2">🕐</div>
-          <div class="text-xl font-bold text-blue-800">Mon–Fri</div>
-          <p class="text-sm text-gray-700">8:00 AM – 6:00 PM</p>
-        </div>
-        <div class="bg-white/70 backdrop-blur-md rounded-xl p-4 shadow-md flex flex-col items-center justify-center text-center">
-          <div class="text-3xl mb-2">📬</div>
-          <div class="text-sm text-blue-800 font-medium">library@example.com</div>
-          <p class="text-sm text-gray-700">Contact Us</p>
-        </div>
+      <div class="bg-white rounded-xl shadow p-4">
+        <h2 class="text-sm text-gray-500">Borrowed</h2>
+        <p class="text-2xl font-bold text-yellow-600">328</p>
+      </div>
+      <div class="bg-white rounded-xl shadow p-4">
+        <h2 class="text-sm text-gray-500">Members</h2>
+        <p class="text-2xl font-bold text-green-600">562</p>
+      </div>
+      <div class="bg-white rounded-xl shadow p-4">
+        <h2 class="text-sm text-gray-500">Overdue</h2>
+        <p class="text-2xl font-bold text-red-600">12</p>
       </div>
     </div>
-  </div>
+
+    <!-- Recent Activity Placeholder -->
+    <div class="mt-8 bg-white rounded-xl shadow p-6">
+      <h2 class="text-lg font-semibold text-gray-800 mb-4">📌 Recent Activity</h2>
+      <ul class="space-y-3 text-sm text-gray-600">
+        <li>• John borrowed “1984”</li>
+        <li>• New member: Sophean Phouk</li>
+        <li>• "Harry Potter" marked as returned</li>
+        <li>• Maintenance scheduled for next week</li>
+      </ul>
+    </div>
+  </section>
 </template>
+
+<script setup>
+// Static values for now — you can replace with API data
+</script>
+
+<style scoped>
+/* Add custom styles here if needed */
+</style>
