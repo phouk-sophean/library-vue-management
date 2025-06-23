@@ -1,51 +1,51 @@
-
 <template>
-  <div class="home min-h-screen bg-gradient-to-br from-blue-100 to-purple-200 p-6">
-    <!-- Main Title -->
-    <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">Explore Our Book Collection</h1>
+  <section class="min-h-screen bg-gray-50 p-6">
+    <!-- Page Title -->
+    <h1 class="text-2xl font-bold text-gray-800 mb-4">📚 Book List</h1>
 
-    <!-- Book Cards Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+    <!-- Search Bar -->
+    <div class="mb-6">
+      <input
+        type="text"
+        v-model="search"
+        placeholder="Search books..."
+        class="w-full sm:w-1/2 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+
+    <!-- Book Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
       <div
-        v-for="(book, index) in books"
-        :key="index"
-        class="bg-white rounded-2xl shadow-xl overflow-hidden transform transition duration-300 hover:scale-105"
+        v-for="book in filteredBooks"
+        :key="book.id"
+        class="bg-white rounded-xl p-4 shadow hover:shadow-md transition"
       >
-        <img
-          :src="book.image"
-          :alt="book.title"
-          class="w-full h-60 object-cover"
-        />
-        <div class="p-6">
-          <h2 class="text-2xl font-bold text-gray-800 mb-2">{{ book.title }}</h2>
-          <p class="text-gray-600 text-sm mb-4">{{ book.description }}</p>
-          <button class="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-4 py-2 rounded-lg shadow hover:shadow-lg hover:from-purple-600 hover:to-blue-600 transition">
-            Read More
-          </button>
-        </div>
+        <h2 class="text-lg font-semibold text-blue-700">{{ book.title }}</h2>
+        <p class="text-sm text-gray-600">Author: {{ book.author }}</p>
+        <p class="text-xs text-gray-400 mt-1">Published: {{ book.year }}</p>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup>
-const books = [
-  {
-    title: "The Great Adventure",
-    description: "Discover a journey through time, magic, and friendship in this unforgettable tale.",
-    image: "https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    title: "Mystery of the Lost Island",
-    description: "Uncover secrets and ancient legends buried deep within a forgotten island.",
-    image: "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    title: "Beyond the Stars",
-    description: "An epic science fiction story that takes you across galaxies and into unknown worlds.",
-    image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80"
-  }
-]
+import { ref, computed } from 'vue'
+
+const search = ref('')
+
+const books = ref([
+  { id: 1, title: 'The Alchemist', author: 'Paulo Coelho', year: 1988 },
+  { id: 2, title: '1984', author: 'George Orwell', year: 1949 },
+  { id: 3, title: 'To Kill a Mockingbird', author: 'Harper Lee', year: 1960 },
+])
+
+const filteredBooks = computed(() => {
+  return books.value.filter((book) =>
+    book.title.toLowerCase().includes(search.value.toLowerCase())
+  )
+})
 </script>
 
-
+<style scoped>
+/* Optional custom styles */
+</style>

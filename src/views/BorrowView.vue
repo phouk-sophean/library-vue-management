@@ -1,36 +1,53 @@
 <template>
-  <div class="borrow bg-blue-50 min-h-screen py-10 px-6">
-    <h1 class="text-3xl text-center text-blue-800 font-bold mb-6">Welcome to the Borrow Page</h1>
+  <section class="min-h-screen bg-gray-50 p-6">
+    <!-- Title -->
+    <h1 class="text-2xl font-bold text-gray-800 mb-4">📦 Borrowing Records</h1>
 
-    <!-- Library Information Section -->
-    <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg p-6 text-left text-blue-900">
-      <h2 class="text-2xl font-semibold mb-4">📚 Library Borrowing Information</h2>
-
-      <ul class="list-disc pl-6 space-y-3">
-        <li><strong>Borrowing Limit:</strong> You can borrow up to 5 books at a time.</li>
-        <li><strong>Loan Period:</strong> Books can be borrowed for 14 days and renewed once.</li>
-        <li><strong>Late Fees:</strong> $0.25 per day after due date.</li>
-        <li><strong>Opening Hours:</strong> Monday - Friday, 8:00 AM to 6:00 PM</li>
-        <li><strong>Membership Required:</strong> Yes. Please sign up at the front desk or online.</li>
-        <li><strong>Contact:</strong> library@example.com | (012) 345-678</li>
-        <li><strong>Location:</strong> 123 Library Street, Phnom Penh</li>
-      </ul>
-
-      <div class="mt-6">
-        <p class="text-sm text-gray-600">Need help? Ask our librarian or visit the help desk.</p>
-      </div>
+    <!-- Borrowing Table -->
+    <div class="overflow-x-auto bg-white rounded-xl shadow border">
+      <table class="min-w-full text-sm text-left">
+        <thead class="bg-gray-100 text-gray-700 uppercase text-xs">
+          <tr>
+            <th class="px-4 py-3">#</th>
+            <th class="px-4 py-3">Book Title</th>
+            <th class="px-4 py-3">Member</th>
+            <th class="px-4 py-3">Borrow Date</th>
+            <th class="px-4 py-3">Return Status</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          <tr v-for="(item, index) in borrowings" :key="item.id" class="hover:bg-gray-50">
+            <td class="px-4 py-3">{{ index + 1 }}</td>
+            <td class="px-4 py-3 font-medium text-blue-600">{{ item.book }}</td>
+            <td class="px-4 py-3">{{ item.member }}</td>
+            <td class="px-4 py-3">{{ item.date }}</td>
+            <td class="px-4 py-3">
+              <span
+                :class="[
+                  'px-2 py-1 rounded-full text-xs font-medium',
+                  item.returned ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                ]"
+              >
+                {{ item.returned ? 'Returned' : 'Pending' }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-  </div>
+  </section>
 </template>
 
+<script setup>
+import { ref } from 'vue'
 
+const borrowings = ref([
+  { id: 1, book: 'The Alchemist', member: 'John Smith', date: '2025-06-20', returned: true },
+  { id: 2, book: '1984', member: 'Alice Doe', date: '2025-06-21', returned: false },
+  { id: 3, book: 'Atomic Habits', member: 'Mark Lee', date: '2025-06-19', returned: true },
+])
+</script>
 
-<style>
-@media (min-width: 1024px) {
-  .about {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-  }
-}
+<style scoped>
+/* Optional custom styling */
 </style>
