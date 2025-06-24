@@ -1,6 +1,6 @@
 <template>
   <section class="min-h-screen bg-gray-50 p-6">
-    <!-- Page Title & Add Button -->
+    <!-- Header -->
     <div class="flex justify-between items-center mb-6">
       <h1 class="text-2xl font-bold text-gray-800">🗂 Categories</h1>
       <button
@@ -11,9 +11,9 @@
       </button>
     </div>
 
-    <!-- Add/Edit Category Form -->
+    <!-- Add/Edit Form -->
     <div v-if="showForm" class="bg-white p-4 rounded-lg shadow mb-6">
-      <form @submit.prevent="isEditing ? updateCategory() : addCategory()">
+      <form @submit.prevent="isEditing ? handleUpdateCategory() : handleAddCategory()">
         <label class="block text-sm font-medium text-gray-700 mb-1">
           {{ isEditing ? "Edit Category" : "Category Name" }}
         </label>
@@ -39,7 +39,7 @@
       </form>
     </div>
 
-    <!-- Category List -->
+    <!-- Category Table -->
     <div class="bg-white shadow rounded-xl border overflow-x-auto">
       <table class="min-w-full text-sm text-left">
         <thead class="bg-gray-100 text-gray-700 uppercase text-xs">
@@ -70,7 +70,7 @@
               </button>
               <button
                 class="text-sm text-red-600 hover:underline"
-                @click="deleteCategory(cat.id)" 
+                @click="handleDeleteCategory(cat.id)"
               >
                 Delete
               </button>
@@ -84,43 +84,49 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import api from "@/plugins/axios";
+import {
+  getCategory,
+  createCategory,
+  updateCategory,
+  deleteCategory,
+} from "@/api/category";
 
 // Refs
 const categories = ref([]);
-const showForm = ref(false);
 const newCategory = ref("");
+const showForm = ref(false);
 const isEditing = ref(false);
 const editingCategory = ref(null);
 
-// Fetch data
+// Fetch list
 const fetchCategories = async () => {
   try {
-    const response = await api.get("/v1/category");
+    const response = await getCategory();
     categories.value = response.data.Data;
   } catch (error) {
     console.error("Fetch error:", error);
   }
 };
 
-// Format created_at
+// Format date
 const formatDate = (dateStr) => {
-  const options = { day: "numeric", month: "long", year: "numeric" };
-  return new Date(dateStr).toLocaleDateString("en-US", options);
+  return new Date(dateStr).toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 };
 
-// Toggle form display
+// Toggle form
 const toggleForm = () => {
   showForm.value = !showForm.value;
   if (!showForm.value) cancelEdit();
 };
 
-// Add new category
-const addCategory = async () => {
+// Add
+const handleAddCategory = async () => {
   try {
-    await api.post("/v1/category", {
-      name: newCategory.value,
-    });
+    await createCategory({ name: newCategory.value });
     newCategory.value = "";
     showForm.value = false;
     fetchCategories();
@@ -129,32 +135,46 @@ const addCategory = async () => {
   }
 };
 
-// Start editing
-const startEdit = (category) => {
-  newCategory.value = category.name;
-  editingCategory.value = category;
+// Edit
+const startEdit = (cat) => {
+  newCategory.value = cat.name;
+  editingCategory.value = cat;
   isEditing.value = true;
   showForm.value = true;
 };
 
-// Cancel editing
+// Cancel
 const cancelEdit = () => {
-  isEditing.value = false;
-  editingCategory.value = null;
   newCategory.value = "";
+  editingCategory.value = null;
+  isEditing.value = false;
 };
 
-// Update existing category
-const updateCategory = async () => {
+// Update
+const handleUpdateCategory = async () => {
   try {
-    await api.put(`/v1/category/${editingCategory.value.id}`, {
+    console.log("Updating category:", editingCategory.value.id, newCategory.value);
+    await updateCategory(editingCategory.value.id, {
       name: newCategory.value,
     });
     cancelEdit();
     showForm.value = false;
     fetchCategories();
   } catch (error) {
-    console.error("Update failed:", error);
+    console.error("Update failed:", error.response?.data || error.message);
+  }
+};
+
+
+// Delete
+const handleDeleteCategory = async (id) => {
+  if (!confirm("Are you sure you want to delete this category?")) return;
+
+  try {
+    await deleteCategory(id);
+    fetchCategories();
+  } catch (error) {
+    console.error("Delete failed:", error);
   }
 };
 
@@ -162,19 +182,8 @@ const updateCategory = async () => {
 onMounted(() => {
   fetchCategories();
 });
-
-const deleteCategory = async (id) => {
-  if (!confirm("Are you sure you want to delete this category?")) return;
-  
-  try {
-    await api.delete(`/v1/category/${id}`);
-    fetchCategories(); // Refresh the list
-  } catch (error) {
-    console.error("Delete failed:", error);
-  }
-};
 </script>
 
 <style scoped>
-/* Add styles if needed */
+/* Optional custom styles */
 </style>

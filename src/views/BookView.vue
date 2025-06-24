@@ -71,12 +71,14 @@
           <button
             @click="openForm(book)"
             class="text-blue-600 hover:text-blue-800"
+            aria-label="Edit book"
           >
             ✏️
           </button>
           <button
             @click="confirmDelete(book.id)"
             class="text-red-600 hover:text-red-800"
+            aria-label="Delete book"
           >
             🗑️
           </button>
@@ -224,13 +226,13 @@
 
         <div class="flex justify-end gap-3">
           <button
-            @click="deleteId = null"
+            @click="cancelDelete"
             class="px-4 py-2 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition"
           >
             Cancel
           </button>
           <button
-            @click="deleteBook"
+            @click="handleDeleteBook"
             class="px-4 py-2 bg-red-600 text-white rounded text-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition"
           >
             Delete
@@ -243,7 +245,13 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import api from "@/plugins/axios";
+import {
+  getBooks,
+  createBook,
+  updateBook,
+  deleteBook,
+  getCategories,
+} from "@/api/book";
 
 const books = ref([]);
 const categories = ref([]);
@@ -269,7 +277,7 @@ const fetchBooks = async () => {
   loading.value = true;
   error.value = false;
   try {
-    const res = await api.get("/v1/book");
+    const res = await getBooks();
     books.value = res.data.data || res.data.Data || [];
   } catch (err) {
     error.value = true;
@@ -282,7 +290,7 @@ const fetchBooks = async () => {
 // Fetch categories
 const fetchCategories = async () => {
   try {
-    const res = await api.get("/v1/category");
+    const res = await getCategories();
     categories.value = res.data.data || res.data.Data || [];
   } catch (err) {
     console.error("Error loading categories:", err);
@@ -342,9 +350,9 @@ function closeForm() {
 const handleSubmit = async () => {
   try {
     if (form.value.id) {
-      await api.put(`/v1/book/${form.value.id}`, { ...form.value });
+      await updateBook(form.value.id, { ...form.value });
     } else {
-      await api.post("/v1/book", { ...form.value });
+      await createBook({ ...form.value });
     }
     await fetchBooks();
     closeForm();
@@ -354,14 +362,19 @@ const handleSubmit = async () => {
   }
 };
 
-// Delete
+// Delete flow
 function confirmDelete(id) {
   deleteId.value = id;
 }
 
-const deleteBook = async () => {
+function cancelDelete() {
+  deleteId.value = null;
+}
+
+const handleDeleteBook = async () => {
+  if (deleteId.value === null) return;
   try {
-    await api.delete(`/v1/book/${deleteId.value}`);
+    await deleteBook(deleteId.value);
     await fetchBooks();
     deleteId.value = null;
   } catch (err) {
@@ -378,5 +391,5 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Add your custom styles if needed */
+/* Add your custom styles here if needed */
 </style>
