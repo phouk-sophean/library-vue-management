@@ -165,7 +165,7 @@ onMounted(() => {
 
 const deleteCategory = async (id) => {
   if (!confirm("Are you sure you want to delete this category?")) return;
-
+  
   try {
     await api.delete(`/v1/category/${id}`);
     fetchCategories(); // Refresh the list

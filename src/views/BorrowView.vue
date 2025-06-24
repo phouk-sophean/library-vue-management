@@ -46,6 +46,7 @@ const borrowings = ref([
   { id: 2, book: '1984', member: 'Alice Doe', date: '2025-06-21', returned: false },
   { id: 3, book: 'Atomic Habits', member: 'Mark Lee', date: '2025-06-19', returned: true },
 ])
+
 </script>
 
 <style scoped>
