@@ -4,7 +4,7 @@
     <div class="flex justify-between items-center mb-6">
       <h1 class="text-2xl font-bold text-gray-800">👥 Members</h1>
       <button
-        @click="openForm()"
+        @click="openForm"
         class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm shadow"
       >
         + Add Member
@@ -33,7 +33,7 @@
             <td class="px-4 py-3 text-gray-500">{{ formatDate(member.updated_at) }}</td>
             <td class="px-4 py-3 text-right space-x-2">
               <button class="text-sm text-blue-600 hover:underline" @click="startEdit(member)">Edit</button>
-              <button class="text-sm text-red-600 hover:underline" @click="deleteMember(member.id)">Delete</button>
+              <button class="text-sm text-red-600 hover:underline" @click="confirmDeleteMember(member.id)">Delete</button>
             </td>
           </tr>
         </tbody>
@@ -66,85 +66,90 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import api from '@/plugins/axios'
+import { ref, onMounted } from 'vue';
+import {
+  getMember,
+  createMember,
+  updateMember as updateMemberApi,
+  deleteMember as deleteMemberApi, // ✅ Renamed to avoid name conflict
+} from "@/api/member";
 
 // States
-const members = ref([])
-const showForm = ref(false)
-const isEditing = ref(false)
-const editingId = ref(null)
+const members = ref([]);
+const showForm = ref(false);
+const isEditing = ref(false);
+const editingId = ref(null);
 
 const form = ref({
   name: '',
   email: '',
   phone: ''
-})
+});
 
 // Load members
 const loadMembers = async () => {
   try {
-    const res = await api.get('/v1/member')
-    members.value = res.data.data || []
+    const res = await getMember();
+    members.value = res.data.data || [];
   } catch (error) {
-    console.error('Error loading members:', error)
+    console.error('Error loading members:', error);
   }
-}
+};
 
 // Add member
 const addMember = async () => {
   try {
-    await api.post('/v1/member', form.value)
-    resetForm()
-    loadMembers()
+    await createMember(form.value);
+    resetForm();
+    loadMembers();
   } catch (error) {
-    console.error('Error adding member:', error)
+    console.error('Error adding member:', error);
   }
-}
+};
 
 // Start editing
 const startEdit = (member) => {
-  form.value = { ...member }
-  editingId.value = member.id
-  isEditing.value = true
-  showForm.value = true
-}
+  form.value = { ...member };
+  editingId.value = member.id;
+  isEditing.value = true;
+  showForm.value = true;
+};
 
 // Update member
 const updateMember = async () => {
   try {
-    await api.put(`/v1/member/${editingId.value}`, form.value)
-    resetForm()
-    loadMembers()
+    await updateMemberApi(editingId.value, form.value);
+    resetForm();
+    loadMembers();
   } catch (error) {
-    console.error('Error updating member:', error)
+    console.error('Error updating member:', error);
   }
-}
+};
 
-// Delete member
-const deleteMember = async (id) => {
-  if (!confirm('Are you sure you want to delete this member?')) return
+// ✅ Renamed to avoid conflict with imported deleteMember
+const confirmDeleteMember = async (id) => {
+  if (!confirm('Are you sure you want to delete this member?')) return;
   try {
-    await api.delete(`/v1/member/${id}`)
-    loadMembers()
+    await deleteMemberApi(id);
+    loadMembers();
   } catch (error) {
-    console.error('Error deleting member:', error)
+    console.error('Error deleting member:', error);
   }
-}
+};
 
 // Reset form
 const resetForm = () => {
-  form.value = { name: '', email: '', phone: '' }
-  isEditing.value = false
-  editingId.value = null
-  showForm.value = false
-}
+  form.value = { name: '', email: '', phone: '' };
+  isEditing.value = false;
+  editingId.value = null;
+  showForm.value = false;
+};
 
-// Open form for add
+// Open form for adding
 const openForm = () => {
-  resetForm()
-  showForm.value = true
-}
+  resetForm();
+  showForm.value = true;
+};
 
 // Format date
 const formatDate = (dateStr) => {
@@ -152,11 +157,11 @@ const formatDate = (dateStr) => {
     year: 'numeric',
     month: 'short',
     day: 'numeric'
-  })
-}
+  });
+};
 
 // Init
 onMounted(() => {
-  loadMembers()
-})
+  loadMembers();
+});
 </script>
